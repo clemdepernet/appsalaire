@@ -1,6 +1,6 @@
 ---
 - hosts: 10.0.0.53
-
+  become: yes
   tasks:
   - name: Creation du groupe Admin
     group:
@@ -19,5 +19,5 @@
 
   - name: Copie du fichier sudo pour ansible
     copy:
-     src: ansible.sudo
+     src: ansiblesudofile
      dest: /etc/sudoers.d/ansible

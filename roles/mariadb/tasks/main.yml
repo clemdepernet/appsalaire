@@ -1,2 +1,18 @@
 ---
-# tasks file for mariadb
+  - name: installation Mariadb
+    dnf:
+     name: "{{ item }}"
+     state: present
+    loop:
+     - mariadb
+     - python3-PyMySQL
+     - mariadb-server
+  - name:  Activation Mariadb
+    systemd:
+     name: mariadb
+     state: started
+     enabled: yes
+  - name: ajout .my.cnf conf mariadb
+    copy:
+     src: .my.cnf
+     dest: /root/.my.cnf

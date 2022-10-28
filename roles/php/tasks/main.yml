@@ -1,2 +1,12 @@
 ---
-# tasks file for php
+- name: Installation de php
+  dnf:
+   name: {{ item }}
+   state: present
+  loop:
+   - {{ packet_php }}
+
+- name: Restart Apache
+  systemd:
+   name: httpd
+   state: restarted
