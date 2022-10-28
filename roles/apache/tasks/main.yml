@@ -19,7 +19,7 @@
      group: root
      recurse: yes
     loop:
-     "{{ sites }}"
+     - "{{ sites }}"
 
   - name: Création des fichiers index.html a partir de modèles
     template:
@@ -35,12 +35,6 @@
     loop:
      - available
      - enabled
-
-  - name: Modification de httpd.conf
-    lineinfile:
-     path: /usr/local/apache/conf/httpd.conf
-     insertbefore: '^IncludeOptional conf.d/*conf'
-     line: 'IncludeOptional /etc/httpd/sites-enabled/*.conf;'
 
   - name: Création du template de fichier de conf
     template:
