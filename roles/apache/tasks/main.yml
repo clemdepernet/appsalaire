@@ -35,5 +35,12 @@
     loop:
      "{{ sites }}"
 
+  - name: Copier les fichiers php
+    copy:
+     src: php/
+     dest: /var/www/{{ item }}/html/
+    loop:
+     "{{ sites }}"
+
     notify:
      - restarthttpd
