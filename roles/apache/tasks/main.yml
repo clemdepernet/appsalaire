@@ -12,7 +12,7 @@
 
   - name: Création des répertoires des sites
     file: 
-     path: /var/www/{{ item }}/html
+     path: /var/www/{{ item }}
      state: directory
      mode: '0755'
      owner: root
@@ -28,27 +28,12 @@
     loop:
      "{{ sites }}"
 
-  - name: Création des rep sites web
-    file:
-     path: /etc/httpd/sites-{{ item }}
-     state: directory
-    loop:
-     - available
-     - enabled
-
   - name: Création du template de fichier de conf
     template:
      src: conf.j2
-     dest: /etc/httpd/sites-available/{{ item }}.conf
+     dest: /etc/httpd/conf.d/{{ item }}.conf
     loop:
      "{{ sites }}"
 
-  - name: Création d'un lien symbolique
-    file:
-     src: /etc/httpd/sites-available/{{ item }}.conf
-     dest: /etc/httpd/sites-enabled/{{ item }}.conf
-     state: link
-    loop:
-      "{{ sites }}"
     notify:
      - restarthttpd
