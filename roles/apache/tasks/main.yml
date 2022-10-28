@@ -10,7 +10,7 @@
      state: started
      enabled: yes
 
-  - name: Création rep /var/www/{{ item }}/html
+  - name: Création des répertoires des sites
     file: 
      path: /var/www/{{ item }}/html
      state: directory
@@ -19,14 +19,14 @@
      group: root
      recurse: yes
     loop:
-     - "{{ sites }}"
+     "{{ sites }}"
 
   - name: Création des fichiers index.html a partir de modèles
     template:
      src: index.j2
      dest: /var/www/{{ item }}/html/index.html
     loop:
-      "{{ sites }}"
+     "{{ sites }}"
 
   - name: Création des rep sites web
     file:
