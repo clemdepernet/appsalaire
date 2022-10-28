@@ -3,3 +3,5 @@
   become_user: ansible
   roles:
     - roles/apache
+    - roles/php
+    - roles/mariadb
