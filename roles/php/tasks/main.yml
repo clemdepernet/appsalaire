@@ -1,10 +1,10 @@
 ---
 - name: Installation de php
   dnf:
-   name: {{ item }}
+   name: Installation de {{ item }}
    state: present
   loop:
-   - {{ packet_php }}
+   - "{{ packet_php }}"
 
 - name: Restart Apache
   systemd:
