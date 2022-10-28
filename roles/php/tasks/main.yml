@@ -1,7 +1,7 @@
 ---
 - name: Installation de php
   dnf:
-   name: Installation de {{ item }}
+   name: "{{ item }}"
    state: present
   loop:
    - php
