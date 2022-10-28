@@ -1,0 +1,27 @@
+---
+- hosts: web
+
+  tasks:
+  - name: creation du groupe admin
+    group:
+     name: admin
+     state: present
+  - name: creation d un user
+    user:
+     name: ansible
+     state: present
+     generate_ssh_key: yes
+     ssh_key_bits: 2048
+     ssh_key_file: .ssh/id_rsa
+     password: 'rootroot'
+     group: 'admin'
+  - name: Ajout de la cle publique de l utilisateur ansible
+    ansible.posix.authorized_key:
+     user: ansible
+     state: present
+     key: "{{ lookup('file', '/home/ansible/.ssh/id_rsa.pub') }}"
+
+  - name: copie du fichier sudo pour ansible
+    copy:
+     src: ansible.sudo
+     dest: /etc/sudoers.d/ansible

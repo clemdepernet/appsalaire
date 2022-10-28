@@ -1,0 +1,23 @@
+---
+- hosts: 10.0.0.53
+
+  tasks:
+  - name: Creation du groupe Admin
+    group:
+     name: admin
+     state: present
+  - name: Creation du user ansible
+    user:
+     name: ansible
+     state: present
+     
+  - name: Ajout de la cle publique de clement
+    ansible.posix.authorized_key:
+     user: clement
+     state: present
+     key: "{{ lookup('file', '/home/clement/.ssh/id_rsa.pub') }}"
+
+  - name: Copie du fichier sudo pour ansible
+    copy:
+     src: ansible.sudo
+     dest: /etc/sudoers.d/ansible

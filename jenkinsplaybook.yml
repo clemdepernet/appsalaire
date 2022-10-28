@@ -1,0 +1,5 @@
+---
+- hosts: [web]
+  become_user: ansible
+  roles:
+    - roles/apache

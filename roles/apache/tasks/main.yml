@@ -1,0 +1,60 @@
+---
+  - name: Installation de Apache
+    dnf:
+     name: httpd
+     state: present
+
+  - name: Activation de Apache
+    systemd:
+     name: httpd
+     state: started
+     enabled: yes
+
+  - name: Création rep /var/www/{{ item }}/html
+    file: 
+     path: /var/www/{{ item }}/html
+     state: directory
+     mode: '0755'
+     owner: root
+     group: root
+     recurse: yes
+    loop:
+     "{{ sites }}"
+
+  - name: Création des fichiers index.html a partir de modèles
+    template:
+     src: index.j2
+     dest: /var/www/{{ item }}/html/index.html
+    loop:
+      "{{ sites }}"
+
+  - name: Création des rep sites web
+    file:
+     path: /etc/httpd/sites-{{ item }}
+     state: directory
+    loop:
+     - available
+     - enabled
+
+  - name: Modification de httpd.conf
+    lineinfile:
+     path: /etc/httpd/httpd.conf
+     insertbefore: '^IncludeOptional conf.d/*conf'
+     line: 'IncludeOptional /etc/httpd/sites-enabled/*.conf;'
+
+  - name: Création du template de fichier de conf
+    template:
+     src: conf.j2
+     dest: /etc/httpd/sites-available/{{ item }}.conf
+    loop:
+     "{{ sites }}"
+
+  - name: Création d'un lien symbolique
+    file:
+     src: /etc/httpd/sites-available/{{ item }}.conf
+     dest: /etc/httpd/sites-enabled/{{ item }}.conf
+     state: link
+    loop:
+      "{{ sites }}"
+    notify:
+     - restarthttpd
